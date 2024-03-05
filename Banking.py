@@ -2,14 +2,11 @@ import streamlit as st
 import base64
 import random
 
-# Function to get base64 string of the image for background
 def get_image_as_base64(path):
     with open(path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode()
 
-# CSS to set a background image
-# Replace 'background.jpg' with your actual image file name
-background_image_base64 = get_image_as_base64("background.jpg") # Ensure the file is in the same directory
+background_image_base64 = get_image_as_base64("background.jpg")
 st.markdown(
     f"""
     <style>
@@ -62,7 +59,6 @@ class Bank(User):
     def withdrawal(self, amount):
         self.amount = amount
         if self.amount > self.balance:
-            # Do not do anything here, handle the message in the callback
             pass
         else:
             self.balance -= self.amount
@@ -86,14 +82,12 @@ def check_login(username: str, password: str) -> bool:
     return creds.verify_credentials(username, password)
 
 def deposit_callback():
-    # Use the input value directly from the session state
     amount = st.session_state.amount_to_deposit
     user_bank.deposit(amount)
     st.success(f"Deposited \${amount:.2f}. Your new balance is \${user_bank.balance:.2f}")
     st.experimental_rerun()
 
 def withdrawal_callback():
-    # Use the input value directly from the session state
     amount = st.session_state.amount_to_withdraw
     user_bank.withdrawal(amount)
     if amount <= user_bank.balance:
@@ -109,7 +103,6 @@ def handle_bank_operations(user_bank):
         amount = st.number_input("Amount to deposit", min_value=0.01, key='amount_to_deposit')
         if st.button("Deposit"):
             user_bank.deposit(amount)
-            # Update the balance display manually
             balance_placeholder.markdown(f"#### Your available balance is ${st.session_state['balance']:,.2f}")
             st.success(f"Deposited \${amount:.2f}. Your new balance is \${user_bank.balance:.2f}")
 
@@ -120,7 +113,6 @@ def handle_bank_operations(user_bank):
             if amount > user_bank.balance:
                 st.error('Insufficient Funds. The available balance is ${:.2f}'.format(user_bank.balance))
             else:
-                # Update the balance display manually
                 balance_placeholder.markdown(f"#### Your available balance is ${st.session_state['balance']:,.2f}")
                 st.success(f"Withdrew \${amount:.2f}. Your new balance is \${user_bank.balance:.2f}")
 
